@@ -1,0 +1,25 @@
+h1 Listing reserves
+
+table
+  thead
+    tr
+      th Collectible
+      th Email
+      th Confirmed
+      th
+      th
+      th
+
+  tbody
+    - @reserves.each do |reserf|
+      tr
+        td = reserf.collectible
+        td = reserf.email
+        td = reserf.confirmed
+        td = link_to 'Show', reserf
+        td = link_to 'Edit', edit_reserf_path(reserf)
+        td = link_to 'Destroy', reserf, data: { confirm: 'Are you sure?' }, method: :delete
+
+br
+
+= link_to 'New Reserve', new_reserf_path

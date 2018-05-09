@@ -1,0 +1,30 @@
+p#notice = notice
+
+p
+  strong Category:
+  = @collectible.category
+p
+  strong Hashsum:
+  = @collectible.hashsum
+p
+  strong Ext:
+  = @collectible.ext
+p
+  strong Width:
+  = @collectible.width
+p
+  strong Height:
+  = @collectible.height
+p
+  strong Description:
+  = @collectible.description
+p
+  strong Amount:
+  = @collectible.amount
+p
+  strong Eth:
+  = @collectible.eth
+
+=> link_to 'Edit', edit_collectible_path(@collectible)
+'|
+=< link_to 'Back', collectibles_path

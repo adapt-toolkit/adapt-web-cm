@@ -1,0 +1,15 @@
+h2.ui.image.header
+  = image_tag 'adapt-logo.png', class: 'image'
+= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: 'ui large form' }) do |f|
+  .ui.stacked.segment
+    .field
+      .ui.left.icon.input
+        i.user.icon
+        = f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "E-mail address"
+    .field
+      .ui.left.icon.input
+        i.lock.icon
+        = f.password_field :password, autocomplete: "off", placeholder: "Password"
+    = f.submit "Log in", class: "ui fluid large submit button"
+  .ui.error.message
+  = render "devise/shared/links"

@@ -1,0 +1,21 @@
+doctype html
+html
+  head
+    title ADAPT CM
+    = csrf_meta_tags
+
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+  body
+    .ui.fixed.inverted.menu
+      .ui.container
+        .header.item
+          | ADAPT
+        a.item href=collectibles_path Collectibles
+        a.item href=categories_path Categories
+        a.item href=reserves_path Reserves
+        a.item href=downloads_path Downloads
+        = link_to 'Log out', destroy_user_session_path, method: :delete, class: 'right item'
+    .ui.container.content
+      = semantic_flash
+      == yield

@@ -1,0 +1,18 @@
+= form_for @reserf do |f|
+  - if @reserf.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@reserf.errors.count, "error")} prohibited this reserf from being saved:"
+      ul
+        - @reserf.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :collectible
+    = f.text_field :collectible
+  .field
+    = f.label :email
+    = f.text_field :email
+  .field
+    = f.label :confirmed
+    = f.check_box :confirmed
+  .actions = f.submit

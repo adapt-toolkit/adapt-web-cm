@@ -1,0 +1,19 @@
+h1 Listing downloads
+
+table
+  thead
+    tr
+      th Ip
+      th User agent
+      th
+      th
+      th
+
+  tbody
+    - @downloads.each do |download|
+      tr
+        td = download.ip
+        td = download.user_agent
+        td = link_to 'Show', download
+        td = link_to 'Edit', edit_download_path(download)
+        td = link_to 'Destroy', download, data: { confirm: 'Are you sure?' }, method: :delete

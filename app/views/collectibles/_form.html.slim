@@ -1,0 +1,39 @@
+- if @collectible.errors.any?
+  #error_explanation
+    h2 = "#{pluralize(@collectible.errors.count, "error")} prohibited this collectible from being saved:"
+    ul
+      - @collectible.errors.full_messages.each do |message|
+        li = message
+
+= form_for @collectible, html: { class: 'ui form' } do |f|
+  .field
+    = f.label :category_id
+    = f.select :category_id, options_from_collection_for_select(@categories, :id, :title)
+  .field
+    = f.label :collectible_file
+    = f.file_field :collectible_file
+    small style="color: gray;"
+      | Current file:
+      - if f.object.hashsum
+        = " "
+        b style="color: black;"
+          = f.object.hashsum + "." + f.object.ext
+        | . Upload a new one to replace.
+      - else
+        i  no file
+
+  .fields
+    .four.wide.field
+      = f.label :amount, 'Amount'
+      = f.number_field :amount
+    .five.wide.field
+      = f.label :eth, 'Minimal ETH'
+      = f.text_field :eth
+  .field
+    = f.label :description
+    = f.text_area :description, rows: 20
+    small style="color: gray;" text/markdown
+
+  .field
+    = f.submit class: 'ui small primary button'
+    = link_to 'Back', collectibles_path, class: 'ui small button'
