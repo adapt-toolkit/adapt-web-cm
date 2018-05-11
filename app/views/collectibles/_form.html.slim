@@ -23,17 +23,17 @@
         i  no file
 
   .fields
-    .four.wide.field
+    .two.wide.field
       = f.label :amount, 'Amount'
       = f.number_field :amount
-    .five.wide.field
+    .three.wide.field
       = f.label :eth, 'Minimal ETH'
       = f.text_field :eth
   .field
     = f.label :description
-    = f.text_area :description, rows: 20
+    = f.text_area :description, rows: 14
     small style="color: gray;" text/markdown
 
   .field
-    = f.submit class: 'ui small primary button'
+    = f.submit class: 'ui small secondary button'
     = link_to 'Back', collectibles_path, class: 'ui small button'

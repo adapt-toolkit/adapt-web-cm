@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   resources :collectibles
   resources :categories
   resources :reserves
-  resources :downloads, except: :new
+  resources :downloads, only: :index
 
   devise_for :users
 

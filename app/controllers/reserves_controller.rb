@@ -1,5 +1,6 @@
 class ReservesController < ApplicationController
   before_action :set_reserf, only: [:show, :edit, :update, :destroy]
+  before_action :preload_options_for_collections, only: [:new, :edit, :create, :update]
 
   # GET /reserves
   # GET /reserves.json
@@ -67,8 +68,12 @@ class ReservesController < ApplicationController
       @reserf = Reserve.find(params[:id])
     end
 
+    def preload_options_for_collections
+      @collectibles = Collectible.all
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def reserf_params
-      params.require(:reserf).permit(:collectible_id, :email, :confirmed)
+      params.require(:reserve).permit(:collectible_id, :email, :confirmed)
     end
 end

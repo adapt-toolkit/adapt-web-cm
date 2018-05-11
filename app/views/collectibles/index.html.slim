@@ -1,16 +1,12 @@
 h1 Listing collectibles
 
-table
+table.ui.table
   thead
     tr
       th Category
-      th Hashsum
-      th Ext
-      th Width
-      th Height
-      th Description
-      th Amount
-      th Eth
+      th SHA256
+      th.center.aligned Amount
+      th.center.aligned Eth
       th
       th
       th
@@ -18,18 +14,18 @@ table
   tbody
     - @collectibles.each do |collectible|
       tr
-        td = collectible.category
+        td = collectible.category.try(:title)
         td = collectible.hashsum
-        td = collectible.ext
-        td = collectible.width
-        td = collectible.height
-        td = collectible.description
-        td = collectible.amount
-        td = collectible.eth
-        td = link_to 'Show', collectible
-        td = link_to 'Edit', edit_collectible_path(collectible)
-        td = link_to 'Destroy', collectible, data: { confirm: 'Are you sure?' }, method: :delete
+        td.center.aligned = collectible.amount
+        td.center.aligned = collectible.eth
+        td.collapsing
+          = link_to collectible do
+            i.black.file.icon
+        td.collapsing
+          = link_to edit_collectible_path(collectible) do
+            i.black.edit.icon
+        td.collapsing
+          = link_to collectible, data: { confirm: 'Are you sure?' }, method: :delete do
+            i.black.trash.icon
 
-br
-
-= link_to 'New Collectible', new_collectible_path
+= link_to 'New Collectible', new_collectible_path, class: "ui small secondary button"

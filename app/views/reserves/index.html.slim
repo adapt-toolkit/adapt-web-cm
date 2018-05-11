@@ -1,6 +1,6 @@
 h1 Listing reserves
 
-table
+table.ui.table
   thead
     tr
       th Collectible
@@ -13,13 +13,17 @@ table
   tbody
     - @reserves.each do |reserf|
       tr
-        td = reserf.collectible
+        td = reserf.collectible.hashsum
         td = reserf.email
         td = reserf.confirmed
-        td = link_to 'Show', reserf
-        td = link_to 'Edit', edit_reserf_path(reserf)
-        td = link_to 'Destroy', reserf, data: { confirm: 'Are you sure?' }, method: :delete
+        td.collapsing
+          = link_to reserf do
+            i.black.file.icon
+        td.collapsing
+          = link_to edit_reserf_path(reserf) do
+            i.black.edit.icon
+        td.collapsing
+          = link_to reserf, data: { confirm: 'Are you sure?' }, method: :delete do
+            i.black.trash.icon
 
-br
-
-= link_to 'New Reserve', new_reserf_path
+= link_to 'New Reserve', new_reserf_path, class: "ui small secondary button"
