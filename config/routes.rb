@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   resources :collectibles
-  resources :categories
+  resources :categories, except: [:index, :show]
   resources :reserves
   resources :downloads, only: :index
 

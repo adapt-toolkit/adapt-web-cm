@@ -1,30 +1,60 @@
 p#notice = notice
 
-p
-  strong Category:
-  = @collectible.category
-p
-  strong Hashsum:
-  = @collectible.hashsum
-p
-  strong Ext:
-  = @collectible.ext
-p
-  strong Width:
-  = @collectible.width
-p
-  strong Height:
-  = @collectible.height
-p
-  strong Description:
-  = @collectible.description
-p
-  strong Amount:
-  = @collectible.amount
-p
-  strong Eth:
-  = @collectible.eth
+h2 = @collectible.collectible_file.file.filename
 
-=> link_to 'Edit', edit_collectible_path(@collectible)
-'|
-=< link_to 'Back', collectibles_path
+.ui.grid
+  .two.wide.column
+    = image_tag @collectible.collectible_file, class: 'ui rounded fluid image'
+    div style="text-align:center;font-size:11px;"
+      = @collectible.width
+      | x
+      = @collectible.height
+  .seven.wide.column
+    p
+      strong Category: 
+      = @collectible.category.try(:title)
+    p
+      strong Amount: 
+      = @collectible.amount
+      br
+      strong Eth: 
+      = @collectible.eth
+  .seven.wide.column
+    h5 Description
+    = @collectible.description
+
+br
+
+= link_to 'Edit', edit_collectible_path(@collectible), class: 'ui small secondary button'
+| &nbsp;
+= link_to 'Back', collectibles_path, class: 'ui small button'
+
+
+h3 Reserves
+
+table.ui.very.basic.small.compact.table
+  thead
+    tr
+      th.collapsing Date/Time
+      th Email
+      th.collapsing Confirmed
+      th.collapsing
+      th.collapsing
+      th.collapsing
+  tbody
+    - @reserves.each do |reserve|
+      tr
+        td.collapsing = reserve.created_at
+        td = reserve.email
+        td.collapsing = reserve.confirmed
+        td.collapsing
+          = link_to reserve do
+            i.black.file.alternate.outline.icon
+        td.collapsing
+          = link_to edit_reserve_path(reserve) do
+            i.black.edit.outline.icon
+        td.collapsing
+          = link_to reserve, data: { confirm: 'Are you sure?' }, method: :delete do
+            i.black.trash.alternate.outline.icon
+
+= link_to 'New Reserve', new_reserve_path(collectible_id: @collectible.id), class: "ui small secondary button"

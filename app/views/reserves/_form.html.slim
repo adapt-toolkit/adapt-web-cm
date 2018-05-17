@@ -1,14 +1,14 @@
-- if @reserf.errors.any?
+- if @reserve.errors.any?
   #error_explanation
-    h2 = "#{pluralize(@reserf.errors.count, "error")} prohibited this reserf from being saved:"
+    h2 = "#{pluralize(@reserve.errors.count, "error")} prohibited this reserve from being saved:"
     ul
-      - @reserf.errors.full_messages.each do |message|
+      - @reserve.errors.full_messages.each do |message|
         li = message
 
-= form_for @reserf, html: { class: 'ui form' } do |f|
+= form_for @reserve, html: { class: 'ui form' } do |f|
   .field
     = f.label :collectible_id
-    = f.select :collectible_id, options_from_collection_for_select(@collectibles, :id, :hashsum)
+    = f.select :collectible_id, options_from_collection_for_select(@collectibles, :id, :hashsum, (f.object.collectible_id || params[:collectible_id]))
   .field
     = f.label :email
     = f.text_field :email
@@ -17,4 +17,8 @@
     = f.check_box :confirmed
   .field
     = f.submit class: 'ui small secondary button'
-    = link_to 'Back', reserves_path, class: 'ui small button'
+    | &nbsp;
+    - if params[:collectible_id]
+      = link_to 'Back', collectible_path(id: params[:collectible_id]), class: 'ui small button'
+    - else
+      = link_to 'Back', reserves_path, class: 'ui small button'

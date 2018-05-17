@@ -5,6 +5,10 @@ class DownloadsController < ApplicationController
   # GET /downloads.json
   def index
     @downloads = Download.all
+    @last_24h = Download.where("created_at >= ?", Time.now - 24.hours).count
+    @last_7d = Download.where("created_at >= ?", Time.now - 7.days).count
+    @last_30d = Download.where("created_at >= ?", Time.now - 30.days).count
+    @total = Download.count
   end
 
   # DELETE /downloads/1

@@ -1,29 +1,28 @@
-h1 Listing reserves
+h1 Reserves Log
 
-table.ui.table
+table.ui.very.basic.small.compact.table
   thead
     tr
+      th.collapsing Date/Time
       th Collectible
       th Email
-      th Confirmed
-      th
-      th
-      th
-
+      th.collapsing Confirmed
+      th.collapsing
+      th.collapsing
+      th.collapsing
   tbody
-    - @reserves.each do |reserf|
+    - @reserves.each do |reserve|
       tr
-        td = reserf.collectible.hashsum
-        td = reserf.email
-        td = reserf.confirmed
+        td.collapsing = reserve.created_at
+        td = reserve.collectible.hashsum
+        td = reserve.email
+        td.collapsing = reserve.confirmed
         td.collapsing
-          = link_to reserf do
-            i.black.file.icon
+          = link_to reserve do
+            i.black.file.alternate.outline.icon
         td.collapsing
-          = link_to edit_reserf_path(reserf) do
-            i.black.edit.icon
+          = link_to edit_reserve_path(reserve) do
+            i.black.edit.outline.icon
         td.collapsing
-          = link_to reserf, data: { confirm: 'Are you sure?' }, method: :delete do
-            i.black.trash.icon
-
-= link_to 'New Reserve', new_reserf_path, class: "ui small secondary button"
+          = link_to reserve, data: { confirm: 'Are you sure?' }, method: :delete do
+            i.black.trash.alternate.outline.icon

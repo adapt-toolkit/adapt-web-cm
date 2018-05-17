@@ -5,12 +5,17 @@ class CollectiblesController < ApplicationController
   # GET /collectibles
   # GET /collectibles.json
   def index
-    @collectibles = Collectible.all
+    @collectibles_grouped = 
+      Collectible.select("collectibles.*, COUNT(reserves.id) as reserves_count")
+        .joins("LEFT OUTER JOIN reserves ON (reserves.collectible_id = collectibles.id)")
+        .group("collectibles.id")
+        .order(category_id: :asc, created_at: :asc).all.group_by(&:category)
   end
 
   # GET /collectibles/1
   # GET /collectibles/1.json
   def show
+    @reserves = @collectible.reserves
   end
 
   # GET /collectibles/new

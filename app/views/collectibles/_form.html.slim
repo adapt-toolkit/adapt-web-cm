@@ -8,7 +8,7 @@
 = form_for @collectible, html: { class: 'ui form' } do |f|
   .field
     = f.label :category_id
-    = f.select :category_id, options_from_collection_for_select(@categories, :id, :title)
+    = f.select :category_id, options_from_collection_for_select(@categories, :id, :title, f.object.category_id)
   .field
     = f.label :collectible_file
     = f.file_field :collectible_file

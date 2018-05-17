@@ -1,31 +1,41 @@
-h1 Listing collectibles
+h1 Collectibles
+- @collectibles_grouped.each_pair do |category, collectibles|
+  h2
+    = category.try(:title)
+    sup style="font-size:12px;margin-left:16px"
+      = link_to edit_category_path(category) do
+        i.black.edit.outline.icon
+      | &nbsp;
+      = link_to category, data: { confirm: 'Delete category?' }, method: :delete do
+        i.black.trash.alternate.outline.icon
 
-table.ui.table
-  thead
-    tr
-      th Category
-      th SHA256
-      th.center.aligned Amount
-      th.center.aligned Eth
-      th
-      th
-      th
-
-  tbody
-    - @collectibles.each do |collectible|
+  table.ui.very.basic.small.compact.table
+    thead
       tr
-        td = collectible.category.try(:title)
-        td = collectible.hashsum
-        td.center.aligned = collectible.amount
-        td.center.aligned = collectible.eth
-        td.collapsing
-          = link_to collectible do
-            i.black.file.icon
-        td.collapsing
-          = link_to edit_collectible_path(collectible) do
-            i.black.edit.icon
-        td.collapsing
-          = link_to collectible, data: { confirm: 'Are you sure?' }, method: :delete do
-            i.black.trash.icon
+        th
+        th style="font-size:11px;" SHA256
+        th.center.aligned style="font-size:11px;" ETH
+        th.center.aligned style="font-size:9px;" AMOUNT
+        th.center.aligned style="font-size:9px;line-height:11px" RESERVES COUNT
+        th colspan=3
+    tbody
+      - collectibles.each do |collectible|
+        tr
+          td.collapsing.center.aligned = image_tag collectible.collectible_file, class: 'ui avatar image'
+          td = collectible.hashsum
+          td.center.aligned = collectible.eth
+          td.center.aligned = collectible.amount
+          td.collapsing.center.aligned = collectible.reserves_count
+          td.collapsing
+            = link_to collectible do
+              i.black.file.alternate.outline.icon
+          td.collapsing
+            = link_to edit_collectible_path(collectible) do
+              i.black.edit.outline.icon
+          td.collapsing
+            = link_to collectible, data: { confirm: 'Are you sure?' }, method: :delete do
+              i.black.trash.alternate.outline.icon
 
 = link_to 'New Collectible', new_collectible_path, class: "ui small secondary button"
+| &nbsp;
+= link_to 'New Category', new_category_path, class: "ui small button"
