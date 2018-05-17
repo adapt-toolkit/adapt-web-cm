@@ -29,7 +29,7 @@ class ReservesController < ApplicationController
 
     respond_to do |format|
       if @reserve.save
-        format.html { redirect_to @reserve, notice: 'Reserve was successfully created.' }
+        format.html { redirect_to collectible_url(@reserve.collectible_id), notice: 'Reserve was successfully created.' }
         format.json { render :show, status: :created, location: @reserve }
       else
         format.html { render :new }
@@ -43,7 +43,7 @@ class ReservesController < ApplicationController
   def update
     respond_to do |format|
       if @reserve.update(reserve_params)
-        format.html { redirect_to @reserve, notice: 'Reserve was successfully updated.' }
+        format.html { redirect_to collectible_url(@reserve.collectible_id), notice: 'Reserve was successfully updated.' }
         format.json { render :show, status: :ok, location: @reserve }
       else
         format.html { render :edit }
@@ -57,7 +57,7 @@ class ReservesController < ApplicationController
   def destroy
     @reserve.destroy
     respond_to do |format|
-      format.html { redirect_to reserves_url, notice: 'Reserve was successfully destroyed.' }
+      format.html { redirect_to collectible_url(@reserve.collectible_id), notice: 'Reserve was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
