@@ -10,6 +10,9 @@
     = f.label :collectible_id
     = f.select :collectible_id, options_from_collection_for_select(@collectibles, :id, :hashsum, (f.object.collectible_id || params[:collectible_id]))
   .field
+    = f.label :eth_address, 'ETH Address'
+    = f.text_field :eth_address
+  .field
     = f.label :email
     = f.text_field :email
   .field
