@@ -5,6 +5,7 @@ table.ui.very.basic.small.compact.table
     tr
       th.collapsing Date/Time
       th Collectible
+      th ETH Address
       th Email
       th.collapsing Confirmed
       th.collapsing
@@ -15,6 +16,7 @@ table.ui.very.basic.small.compact.table
       tr
         td.collapsing = reserve.created_at
         td = reserve.collectible.hashsum
+        td = reserve.eth_address
         td = reserve.email
         td.collapsing = reserve.confirmed
         td.collapsing

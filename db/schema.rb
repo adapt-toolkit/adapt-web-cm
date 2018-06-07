@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180501121135) do
+ActiveRecord::Schema.define(version: 20180605091513) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,6 +35,9 @@ ActiveRecord::Schema.define(version: 20180501121135) do
     t.float "eth"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "unsaleable", default: false, null: false
+    t.integer "sort_order", default: 0, null: false
+    t.string "json_file"
     t.index ["category_id"], name: "index_collectibles_on_category_id"
   end
 
@@ -51,6 +54,7 @@ ActiveRecord::Schema.define(version: 20180501121135) do
     t.boolean "confirmed"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "eth_address"
     t.index ["collectible_id"], name: "index_reserves_on_collectible_id"
   end
 

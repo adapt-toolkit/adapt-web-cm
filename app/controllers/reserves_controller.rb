@@ -74,6 +74,6 @@ class ReservesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def reserve_params
-      params.require(:reserve).permit(:collectible_id, :email, :confirmed)
+      params.require(:reserve).permit(:collectible_id, :email, :eth_address, :confirmed)
     end
 end

@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
-  resources :collectibles
+  resources :collectibles do
+    member do
+      patch 'sort_order_up'
+      patch 'sort_order_down'
+    end
+  end
   resources :categories, except: [:index, :show]
   resources :reserves
   resources :downloads, only: :index

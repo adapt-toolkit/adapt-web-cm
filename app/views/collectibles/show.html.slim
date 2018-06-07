@@ -2,7 +2,7 @@ h2 = @collectible.collectible_file.file.filename
 
 .ui.grid
   .two.wide.column
-    = image_tag @collectible.collectible_file, class: 'ui rounded fluid image'
+    = image_tag @collectible.collectible_file.thumb, class: 'ui rounded fluid image'
     div style="text-align:center;font-size:11px;"
       = @collectible.width
       | x
@@ -16,7 +16,10 @@ h2 = @collectible.collectible_file.file.filename
       = @collectible.amount
       br
       strong Eth: 
-      = @collectible.eth
+      - if @collectible.unsaleable?
+        | Unsaleable
+      - else
+        = @collectible.eth
   .seven.wide.column
     h5 Description
     = @collectible.description
@@ -34,6 +37,7 @@ table.ui.very.basic.small.compact.table
   thead
     tr
       th.collapsing Date/Time
+      th ETH Address
       th Email
       th.collapsing Confirmed
       th.collapsing
@@ -43,6 +47,7 @@ table.ui.very.basic.small.compact.table
     - @reserves.each do |reserve|
       tr
         td.collapsing = reserve.created_at
+        td = reserve.eth_address
         td = reserve.email
         td.collapsing = reserve.confirmed
         td.collapsing

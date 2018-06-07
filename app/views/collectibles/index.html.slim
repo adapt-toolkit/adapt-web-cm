@@ -15,17 +15,33 @@ h1 Collectibles
         th
         th style="font-size:11px;" SHA256
         th.center.aligned style="font-size:11px;" ETH
-        th.center.aligned style="font-size:9px;" AMOUNT
+        th.center.aligned style="font-size:9px;" QNTY
         th.center.aligned style="font-size:9px;line-height:11px" RESERVES COUNT
-        th colspan=3
+        th colspan=5
     tbody
-      - collectibles.each do |collectible|
+      - collectibles.each_with_index do |collectible, i|
         tr
-          td.collapsing.center.aligned = image_tag collectible.collectible_file, class: 'ui avatar image'
+          td.collapsing.center.aligned = image_tag collectible.collectible_file.thumb.url, class: 'ui avatar image'
           td = collectible.hashsum
-          td.center.aligned = collectible.eth
+          td.center.aligned
+            - if collectible.unsaleable?
+              | &#151;
+            - else
+              = collectible.eth
           td.center.aligned = collectible.amount
           td.collapsing.center.aligned = collectible.reserves_count
+          td.collapsing
+            - if i > 0
+              = link_to sort_order_up_collectible_path(collectible), method: :patch do
+                i.black.long.arrow.alternate.up.icon
+            - else
+              i.circle.outline.icon style="color:#ddd;"
+          td.collapsing
+            - if i < collectibles.count - 1
+              = link_to sort_order_down_collectible_path(collectible), method: :patch do
+                i.black.long.arrow.alternate.down.icon
+            - else
+              i.circle.outline.icon style="color:#ddd;"
           td.collapsing
             = link_to collectible do
               i.black.file.alternate.outline.icon

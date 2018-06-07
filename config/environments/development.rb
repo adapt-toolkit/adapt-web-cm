@@ -55,5 +55,7 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
-  # config.collectibles_storage_path = "/home/adapt-web/static/images/"
+  config.coll_preview_storage_path = "/home/adapt-web/static/images/"
+  config.collectibles_storage_path = "/home/adapt-web/static/p/"
+  config.json_storage_path = "/home/adapt-web/static/j/"
 end
