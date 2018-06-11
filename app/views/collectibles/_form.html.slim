@@ -17,7 +17,7 @@
       - if f.object.hashsum
         = " "
         b style="color: black;"
-          = f.object.collectible_file.file.filename
+          = f.object.hashsum + "." + f.object.ext
         | . Upload a new one to replace.
       - else
         i  no file

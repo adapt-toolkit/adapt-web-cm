@@ -44,18 +44,18 @@ class CollectibleFileUploader < CarrierWave::Uploader::Base
   # Override the filename of the uploaded files:
   # Avoid using model.id or version_name here, see uploader/store.rb for details.
   # def filename
-  #   if original_filename.present?
+  #   if original_filename
   #     sha256 = Digest::SHA256.file(file.file)
   #     "#{sha256.hexdigest}.#{file.extension}"
   #   end
   # end
 
-
   private
 
   def store_collectible_file_attrs
     if file && model
-      model.hashsum, model.ext = original_filename.split(".")
+      model.hashsum = Digest::SHA256.file(file.file)
+      model.ext = file.extension
       model.width, model.height = `identify -format "%wx%h" #{file.path}`.split(/x/)
     end
   end

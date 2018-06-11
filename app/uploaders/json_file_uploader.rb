@@ -41,7 +41,10 @@ class JsonFileUploader < CarrierWave::Uploader::Base
 
   # Override the filename of the uploaded files:
   # Avoid using model.id or version_name here, see uploader/store.rb for details.
-  # def filename
-  #   "something.jpg" if original_filename
-  # end
+  def filename
+    if original_filename.present?
+      sha256 = Digest::SHA256.file(file.file)
+      "#{sha256.hexdigest}.#{file.extension}"
+    end
+  end
 end
