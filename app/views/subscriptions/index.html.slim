@@ -1,0 +1,12 @@
+h1 Subscribers
+
+table.ui.very.basic.small.compact.table
+  thead
+    tr
+      th.collapsing Date/Time
+      th Email
+  tbody
+    - @subscriptions.each do |subscription|
+      tr
+        td.collapsing = reserve.created_at
+        td = subscription.email
