@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :subscriptions, only: :index
   resources :collectibles do
     member do
       patch 'sort_order_up'
