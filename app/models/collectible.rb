@@ -47,24 +47,37 @@ class Collectible < ApplicationRecord
   end
 
   def copy_files_to_public_web_static_folder
-    # Downsized collectible for preview purposes
-    FileUtils.cp(collectible_file.thumb.path,
-              File.join(Rails.configuration.coll_preview_storage_path, hashsum+"."+ext)) if collectible_file.present?
+    if collectible_file.present?
+      # Downsized collectible image for preview purposes
+      FileUtils.cp(collectible_file.thumb.path,
+              File.join(Rails.configuration.coll_preview_storage_path, hashsum+"."+ext))
+      # Collectible image in original dimensions
+      FileUtils.cp(collectible_file.path,
+              File.join(Rails.configuration.coll_preview_storage_path, hashsum+"-original."+ext))
+    end
 
-    # Collectible file & JSON file
+    # Collectible file in /p folder
     FileUtils.cp(collectible_file.path,
       File.join(Rails.configuration.collectibles_storage_path, hashsum)) if collectible_file.present?
+    # JSON file in /j folder
     FileUtils.cp(json_file.path,
       File.join(Rails.configuration.json_storage_path, File.basename(json_file.file.filename, ".*"))) if json_file.present?
   end
 
   def delete_files_from_public_web_static_folder
+    # Cleaning up downsized collectible image
     path_to_coll_preview_file = File.join(Rails.configuration.coll_preview_storage_path, hashsum+"."+ext)
     File.delete(path_to_coll_preview_file) if File.exist?(path_to_coll_preview_file)
 
+    # Collectible image in original dimensions
+    path_to_coll_preview_file = File.join(Rails.configuration.coll_preview_storage_path, hashsum+"-original."+ext)
+    File.delete(path_to_coll_preview_file) if File.exist?(path_to_coll_preview_file)
+
+    # Collectible file in /p folder
     path_to_collectible_file = File.join(Rails.configuration.collectibles_storage_path, hashsum)
     File.delete(path_to_collectible_file) if File.exist?(path_to_collectible_file)
 
+    # JSON file in /j folder
     path_to_json_file = File.join(Rails.configuration.json_storage_path, File.basename(json_file.file.filename, ".*"))
     File.delete(path_to_json_file) if File.exist?(path_to_json_file)
   end
