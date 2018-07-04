@@ -38,6 +38,9 @@ class Collectible < ApplicationRecord
     path_to_coll_preview_file = File.join(Rails.configuration.coll_preview_storage_path, hashsum_was+"."+ext_was)
     File.delete(path_to_coll_preview_file) if File.exist?(path_to_coll_preview_file)
 
+    path_to_coll_preview_file = File.join(Rails.configuration.coll_preview_storage_path, hashsum_was+"-original."+ext_was)
+    File.delete(path_to_coll_preview_file) if File.exist?(path_to_coll_preview_file)
+
     path_to_collectible_file = File.join(Rails.configuration.collectibles_storage_path, hashsum_was)
     File.delete(path_to_collectible_file) if File.exist?(path_to_collectible_file)
   end
@@ -77,8 +80,10 @@ class Collectible < ApplicationRecord
     path_to_collectible_file = File.join(Rails.configuration.collectibles_storage_path, hashsum)
     File.delete(path_to_collectible_file) if File.exist?(path_to_collectible_file)
 
-    # JSON file in /j folder
-    path_to_json_file = File.join(Rails.configuration.json_storage_path, File.basename(json_file.file.filename, ".*"))
-    File.delete(path_to_json_file) if File.exist?(path_to_json_file)
+    if json_file.present?
+      # JSON file in /j folder
+      path_to_json_file = File.join(Rails.configuration.json_storage_path, File.basename(json_file.file.filename, ".*"))
+      File.delete(path_to_json_file) if File.exist?(path_to_json_file)
+    end
   end
 end
