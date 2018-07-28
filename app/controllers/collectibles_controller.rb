@@ -32,7 +32,9 @@ class CollectiblesController < ApplicationController
   # POST /collectibles
   # POST /collectibles.json
   def create
-    @collectible = Collectible.new(collectible_params)
+    # CarrierWave attrs->filename hack
+    @collectible = Collectible.new(collectible_params.except(:collectible_file, :json_file))
+    @collectible.assign_attributes(collectible_params.slice(:collectible_file, :json_file))
 
     respond_to do |format|
       if @collectible.save
@@ -48,8 +50,12 @@ class CollectiblesController < ApplicationController
   # PATCH/PUT /collectibles/1
   # PATCH/PUT /collectibles/1.json
   def update
+    # CarrierWave attrs->filename hack
+    @collectible.assign_attributes(collectible_params.except(:collectible_file, :json_file))
+    @collectible.assign_attributes(collectible_params.slice(:collectible_file, :json_file))
+
     respond_to do |format|
-      if @collectible.update(collectible_params)
+      if @collectible.save
         format.html { redirect_to @collectible, notice: 'Collectible was successfully updated.' }
         format.json { render :show, status: :ok, location: @collectible }
       else
@@ -99,6 +105,6 @@ class CollectiblesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def collectible_params
-      params.require(:collectible).permit(:category_id, :collectible_file, :json_file, :description, :amount, :eth, :unsaleable, :sort_order)
+      params.require(:collectible).permit(:category_id, :collectible_file, :collectible_file_name, :json_file, :json_file_name, :description, :amount, :eth, :unsaleable, :sort_order)
     end
 end

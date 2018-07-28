@@ -15,6 +15,7 @@ class Collectible < ApplicationRecord
   after_save :copy_files_to_public_web_static_folder
   after_destroy :delete_files_from_public_web_static_folder
 
+  attr_accessor :collectible_file_name, :json_file_name
 
   def prev_record
     Collectible.where('sort_order < ?', sort_order).order(sort_order: :desc, created_at: :desc).first
