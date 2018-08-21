@@ -1,0 +1,15 @@
+doctype html
+html
+  head
+    title ADAPT CM
+    = csrf_meta_tags
+
+    = stylesheet_link_tag    'auth', media: 'all', 'data-turbolinks-track': 'reload'
+    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+  body
+    .ui.middle.aligned.center.aligned.grid
+      .column
+        - if alert
+          .ui.red.message
+            p= alert
+        == yield

@@ -1,0 +1,63 @@
+h2 = @collectible.hashsum
+
+.ui.grid
+  .two.wide.column
+    = image_tag @collectible.collectible_file.thumb, class: 'ui rounded fluid image'
+    div style="text-align:center;font-size:11px;"
+      = @collectible.width
+      | x
+      = @collectible.height
+  .seven.wide.column
+    p
+      strong Category: 
+      = @collectible.category.try(:title)
+    p
+      strong Amount: 
+      = @collectible.amount
+      br
+      strong Eth: 
+      - if @collectible.unsaleable?
+        | Unsaleable
+      - else
+        = @collectible.eth
+  .seven.wide.column
+    h5 Description
+    = @collectible.description
+
+br
+
+= link_to 'Edit', edit_collectible_path(@collectible), class: 'ui small secondary button'
+| &nbsp;
+= link_to 'Back', collectibles_path, class: 'ui small button'
+
+
+h3 Reserves
+
+table.ui.very.basic.small.compact.table
+  thead
+    tr
+      th.collapsing Date/Time
+      th ETH Address
+      th Email
+      th.collapsing Confirmed
+      th.collapsing
+      th.collapsing
+      th.collapsing
+  tbody
+    - @reserves.each do |reserve|
+      tr
+        td.collapsing = reserve.created_at
+        td = reserve.eth_address
+        td = reserve.email
+        td.collapsing = reserve.confirmed
+        td.collapsing
+          = link_to reserve do
+            i.black.file.alternate.outline.icon
+        td.collapsing
+          = link_to edit_reserve_path(reserve) do
+            i.black.edit.outline.icon
+        td.collapsing
+          = link_to reserve, data: { confirm: 'Are you sure?' }, method: :delete do
+            i.black.trash.alternate.outline.icon
+
+= link_to 'New Reserve', new_reserve_path(collectible_id: @collectible.id), class: "ui small secondary button"

@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  collectible: one
+  email: MyString
+  confirmed: false
+
+two:
+  collectible: two
+  email: MyString
+  confirmed: false
