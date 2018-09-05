@@ -34,7 +34,7 @@
     div style="text-align:center;color:gray;font-style:italic;padding-bottom:10px;"
       | Collectible Preview
     div style="height:300px;padding:20px;background-color:#eee;text-align:center;"
-      img#collectible_preview_img style="max-width:100%;max-height:260px"
+      img#collectible_preview_img src=f.object.collectible_file style="max-width:100%;max-height:260px"
     | &nbsp;
   .fields
     .eight.wide.field
@@ -62,6 +62,7 @@
       | JSON Preview
     pre style="display:block;height:300px;overflow:auto;padding:20px;background-color:#eee"
       code.prettyprint#json_preview_area
+        = f.object.json_file.try(:file).try(:read)
 
   .fields
     .two.wide.field
