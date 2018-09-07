@@ -84,18 +84,22 @@ class Collectible < ApplicationRecord
   end
 
   def autoremove_collectible_file
-    path_to_coll_preview_file = File.join(Rails.configuration.coll_preview_storage_path, hashsum_was.to_s+"."+ext_was)
-    File.delete(path_to_coll_preview_file) if File.exist?(path_to_coll_preview_file)
+    if hashsum_was.present?
+      path_to_coll_preview_file = File.join(Rails.configuration.coll_preview_storage_path, hashsum_was+"."+ext_was)
+      File.delete(path_to_coll_preview_file) if File.exist?(path_to_coll_preview_file)
 
-    path_to_coll_preview_file = File.join(Rails.configuration.coll_preview_storage_path, hashsum_was.to_s+"-original."+ext_was)
-    File.delete(path_to_coll_preview_file) if File.exist?(path_to_coll_preview_file)
+      path_to_coll_preview_file = File.join(Rails.configuration.coll_preview_storage_path, hashsum_was+"-original."+ext_was)
+      File.delete(path_to_coll_preview_file) if File.exist?(path_to_coll_preview_file)
 
-    path_to_collectible_file = File.join(Rails.configuration.collectibles_storage_path, hashsum_was.to_s)
-    File.delete(path_to_collectible_file) if File.exist?(path_to_collectible_file)
+      path_to_collectible_file = File.join(Rails.configuration.collectibles_storage_path, hashsum_was)
+      File.delete(path_to_collectible_file) if File.exist?(path_to_collectible_file)
+    end
   end
   def autoremove_json_file
-    path_to_json_file = File.join(Rails.configuration.json_storage_path, File.basename(json_file_was.to_s, ".*"))
-    File.delete(path_to_json_file) if File.exist?(path_to_json_file)
+    if json_file_was.present?
+      path_to_json_file = File.join(Rails.configuration.json_storage_path, File.basename(json_file_was, ".*"))
+      File.delete(path_to_json_file) if File.exist?(path_to_json_file)
+    end
   end
 
   def copy_files_to_public_web_static_folder
