@@ -54,7 +54,7 @@ class CollectibleFileUploader < CarrierWave::Uploader::Base
 
   def store_collectible_file_attrs
     if file && model
-      model.hashsum = model.collectible_file_name.presence || Digest::SHA256.file(file.file)
+      model.hashsum = model.collectible_file_name.presence || SHA3::Digest::SHA256.file(file.file).hexdigest
       model.ext = file.extension
       model.width, model.height = `identify -format "%wx%h" #{file.path}`.split(/x/)
     end

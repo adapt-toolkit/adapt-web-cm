@@ -7,6 +7,7 @@ class Collectible < ApplicationRecord
   mount_uploader :json_file, JsonFileUploader
 
   validates :category_id, :collectible_file, presence: true
+  validate :validate_json, if: -> { json_file_has_just_been_uploaded }
 
   before_create :set_sort_order, if: -> { sort_order === 0 }
 
@@ -47,6 +48,63 @@ class Collectible < ApplicationRecord
 
 
   private
+
+  def validate_json
+    json = JSON.parse(json_file.file.read)
+
+    if json['title'] === nil
+      errors.add(:json_file, "doesn't have a `title`")
+    end
+
+    if json['properties'] === nil
+      errors.add(:json_file, "doesn't have `properties`")
+    else
+      %w( name description image license ).each do |prop_name|
+        validate_property json['properties'], prop_name
+      end
+    end
+
+    # Ensure this line is before the SHA3 digest check
+    if not errors[:collectible_file].empty?
+      errors.add(:json_file, "can't be fully validated because of validation errors with image file")
+    end
+
+    if errors[:json_file].empty?
+      if not json['properties']['image']['description'].start_with? SHA3::Digest::SHA256.hexdigest(collectible_file.file.read)
+        errors.add(:json_file, "has image file name that doesn't match with calculated image hash")
+      end
+
+      digest = SHA3::Digest::SHA256.new
+      digest.update SHA3::Digest::SHA256.digest(collectible_file.file.read)
+      digest.update json['properties']['name']['description']
+      digest.update json['properties']['description']['description']
+      digest.update json['properties']['license']['description']
+
+      json_hash = digest.hexdigest
+
+      if not json_file.file.filename.start_with?(json_hash)
+        errors.add(:json_file, "name doesn't match with calculated json hash")
+      end
+    end
+  rescue JSON::ParserError
+    errors.add(:json_file, "parser error has occured")
+  end
+
+  # This function is used by `validate_json`
+  def validate_property(props, prop_name)
+    if props[prop_name] === nil
+      errors.add(:json_file, "doesn't have `properties.#{prop_name}`")
+    else
+      if props[prop_name]['type'] === nil
+        errors.add(:json_file, "doesn't have `properties.#{prop_name}.type`")
+      elsif props[prop_name]['type'] != "string"
+        errors.add(:json_file, "has incorrect `properties.#{prop_name}.type`")
+      end                  
+      if props[prop_name]['description'] === nil
+        errors.add(:json_file, "doesn't have `properties.#{prop_name}.description`")
+      end
+    end
+  end
 
   def set_sort_order
     self.sort_order = (last_record.try(:sort_order) || 0) + 100
