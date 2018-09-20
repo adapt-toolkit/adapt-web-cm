@@ -55,9 +55,9 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'devise', '~> 4.4'
 gem 'carrierwave', '~> 1.0'
-gem 'mini_magick'
+gem 'mini_magick', '~> 4.8'
 gem 'semantic-ui-sass', '~> 2.3'
 gem 'slim-rails', '~> 3.1'
-gem 'jquery-rails'
-gem 'sha3'
-gem 'jwt'
+gem 'jquery-rails', '~> 4.3.3'
+gem 'sha3', '~> 1.0'
+gem 'jwt', '~> 2.1'

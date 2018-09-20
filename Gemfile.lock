@@ -218,17 +218,17 @@ DEPENDENCIES
   coffee-rails (~> 4.2)
   devise (~> 4.4)
   jbuilder (~> 2.5)
-  jquery-rails
-  jwt
+  jquery-rails (~> 4.3.3)
+  jwt (~> 2.1)
   listen (>= 3.0.5, < 3.2)
-  mini_magick
+  mini_magick (~> 4.8)
   pg (>= 0.18, < 2.0)
   puma (~> 3.7)
   rails (~> 5.1.6)
   sass-rails (~> 5.0)
   selenium-webdriver
   semantic-ui-sass (~> 2.3)
-  sha3
+  sha3 (~> 1.0)
   slim-rails (~> 3.1)
   spring
   spring-watcher-listen (~> 2.0.0)
