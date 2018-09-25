@@ -58,7 +58,7 @@
       | JSON Preview
     pre style="display:block;height:300px;overflow:auto;padding:20px;background-color:#eee"
       code.prettyprint#json_preview_area
-        = f.object.json_file.try(:file).try(:read)
+        = f.object.json_file.try(:file).try(:read).to_s.force_encoding('UTF-8')
 
   .fields
     .two.wide.field
@@ -76,7 +76,7 @@
 
   .field
     = f.label :description
-    = f.text_area :description, value: f.object.description.force_encoding(Encoding::UTF_8), rows: 14
+    = f.text_area :description, rows: 14
 
   .fields
     .five.wide.field
