@@ -7,23 +7,31 @@ table.ui.very.basic.small.compact.table
       th.collapsing.center.aligned
         i.linkify.icon
       th Collectible
+      th.collapsing.center.aligned
+        i.ethereum.icon
       th ETH Address
       th Email
-      th.collapsing Confirmed
+      th.collapsing.center.aligned
+        i.check.icon
       th.collapsing
       th.collapsing
       th.collapsing
   tbody
     - @reserves.each do |reserve|
       tr
-        td.collapsing = reserve.created_at
+        td.collapsing = reserve.created_at.strftime("%-d %b, %l:%M %p")
         td.collapsing.center.aligned
           = link_to collectible_url(reserve.collectible) do
             = image_tag reserve.collectible.collectible_file.thumb.url, class: 'ui avatar image'
         td = reserve.collectible.hashsum
+        td = reserve.collectible.eth
         td = reserve.eth_address
         td = reserve.email
-        td.collapsing = reserve.confirmed
+        td.collapsing
+          - if reserve.confirmed
+            i.check.circle.outline.icon
+          - else
+            i.circle.outline.icon
         td.collapsing
           = link_to reserve do
             i.black.file.alternate.outline.icon

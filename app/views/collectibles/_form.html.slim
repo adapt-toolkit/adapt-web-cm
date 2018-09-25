@@ -76,7 +76,7 @@
 
   .field
     = f.label :description
-    = f.text_area :description, rows: 14
+    = f.text_area :description, value: f.object.description.force_encoding(Encoding::UTF_8), rows: 14
 
   .fields
     .five.wide.field
