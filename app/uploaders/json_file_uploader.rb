@@ -43,11 +43,7 @@ class JsonFileUploader < CarrierWave::Uploader::Base
   # Avoid using model.id or version_name here, see uploader/store.rb for details.
   def filename
     if original_filename.present?
-      if model.json_file_name.present?
-        "#{model.json_file_name}.#{file.extension}"
-      else
-        file.filename
-      end
+      model.json_file_name.presence || file.filename
     end
   end
 end

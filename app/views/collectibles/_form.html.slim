@@ -12,32 +12,35 @@
   .fields
     .eight.wide.field
       = f.label :collectible_file
-      = f.file_field :collectible_file
+      = f.file_field :collectible_file, accept: 'image/*'
+      = f.hidden_field :collectible_file_base64
       small style="color: gray;"
         | Current file:
         - if f.object.hashsum
           = " "
           b style="color: black;"
-            = f.object.hashsum + "." + f.object.ext
+            = [f.object.hashsum, f.object.ext].join(".")
           | . Upload a new one to replace.
         - else
           i  no file
     .eight.wide.field
       = f.label :collcetible_file_name, 'Collectible file name'
-      = f.text_field :collectible_file_name
+      = f.text_field :collectible_file_name, value: f.object.collectible_file_name.presence || [f.object.hashsum, f.object.ext].join(".").presence
       small style="color: gray;"
         | You can specify name for the currently uploading or already uploaded collectible file.
 
   .field
     div style="text-align:center;color:gray;font-style:italic;padding-bottom:10px;"
       | Collectible Preview
-    div style="height:300px;padding:20px;background-color:#eee;text-align:center;"
-      img#collectible_preview_img src=f.object.collectible_file style="max-width:100%;max-height:260px"
+    div#collectible_preview_area
+      label#collectible_drop_area for="collectible_collectible_file"
+        img#collectible_preview_img src=f.object.collectible_file style="max-width:100%;max-height:260px"
     | &nbsp;
   .fields
     .eight.wide.field
       = f.label :json_file, 'JSON file'
-      = f.file_field :json_file
+      = f.file_field :json_file, accept: 'application/json'
+      = f.hidden_field :json_file_base64
       small style="color: gray;"
         | Current file:
         - if f.object.json_file.present?
@@ -49,16 +52,17 @@
           i  no file
     .eight.wide.field
       = f.label :json_file_name, 'JSON file name'
-      = f.text_field :json_file_name
+      = f.text_field :json_file_name, value: f.object.json_file_name.presence || f.object.json_file.try(:file).try(:filename)
       small style="color: gray;"
         | You can specify name for the currently uploading or already uploaded JSON file.
 
   .field
     div style="text-align:center;color:gray;font-style:italic;padding-bottom:10px;"
       | JSON Preview
-    pre style="display:block;height:300px;overflow:auto;padding:20px;background-color:#eee"
-      code.prettyprint#json_preview_area
-        = f.object.json_file.try(:file).try(:read).to_s.force_encoding('UTF-8')
+    pre style="display:block;padding:5px;background-color:#eee;margin:0 0 30px 0"
+      div#json_drop_area
+        code.prettyprint#json_preview_area style="display:block;height:255px;overflow:auto;"
+          = f.object.json_file.try(:file).try(:read).to_s.force_encoding('UTF-8')
 
   .fields
     .two.wide.field

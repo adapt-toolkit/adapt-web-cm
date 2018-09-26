@@ -6,3 +6,45 @@ body
 .content
   margin-top: 60px
   padding-bottom: 60px
+
+#collectible_preview_area
+  min-height: 300px
+  background-color: #eee
+  padding: 5px
+  text-align: center
+
+#collectible_drop_area, #json_drop_area
+  display: block
+  height: 290px
+  padding: 13px
+  border: 2px dashed #d0d0d0
+  border-radius: 6px
+
+  &::before
+    display: block
+    position: absolute
+    margin-top: -10px
+    font-size: 10px
+    color: #999
+
+  &.dragging
+    border: 2px dashed #777
+    &::before
+      color: #666
+
+#collectible_drop_area
+  &::before
+    content: "Drag'n'Drop Collectible File"
+  &.dragging
+    &::before
+      content: "Drop Collectible File Here!"
+
+#json_drop_area
+  padding-top: 23px
+  &::before
+    margin-top: -20px
+    font-family: "Lato", "Helvetica Neue", Arial, Helvetica, sans-serif
+    content: "Drag'n'Drop JSON File"
+  &.dragging
+    &::before
+      content: "Drop JSON File Here!"

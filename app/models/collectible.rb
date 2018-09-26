@@ -9,30 +9,50 @@ class Collectible < ApplicationRecord
   validates :category_id, :collectible_file, presence: true
   validate :validate_json, if: -> { json_file_has_just_been_uploaded }
 
+  validates :collectible_file_name, format: { with: /\.\w+\z/i, message: 'doesn\'t have an extension' },
+                                    if: -> { collectible_file_name_changed }
+  validates :json_file_name, format: { with: /\.\w+\z/i, message: 'doesn\'t have an extension' },
+                             if: -> { json_file_name_changed }
+
   before_create :set_sort_order, if: -> { sort_order === 0 }
 
   # Uploads renaming
-  before_update :mv_collectible_file, if: -> { collectible_file_name.present? && !collectible_file_has_just_been_uploaded }
-  before_update :mv_json_file,        if: -> { json_file_name.present? && !json_file_has_just_been_uploaded }
+  before_update :rename_collectible_file, if: -> { collectible_file_name_changed && !collectible_file_has_just_been_uploaded }
+  before_update :rename_json_file,        if: -> { json_file_name_changed && !json_file_has_just_been_uploaded }
 
   # Autoremove old uploads if the new ones is coming.
   before_update :autoremove_collectible_file, if: -> { collectible_file_has_just_been_uploaded }
   before_update :autoremove_json_file,        if: -> { json_file_has_just_been_uploaded }
 
+  after_save :tmp_files_cleanup
   after_save :copy_files_to_public_web_static_folder
   after_destroy :delete_files_from_public_web_static_folder
 
-  attr_accessor :collectible_file_name, :collectible_file_has_just_been_uploaded,
-                :json_file_name,        :json_file_has_just_been_uploaded
+  attr_accessor :collectible_file_base64, :collectible_file_name, :collectible_file_has_just_been_uploaded,
+                :json_file_base64,        :json_file_name,        :json_file_has_just_been_uploaded
 
   # Marks that file has just been uploaded
   def collectible_file=(obj)
     super(obj)
-    self.collectible_file_has_just_been_uploaded = true
+    self.collectible_file_has_just_been_uploaded = (collectible_file == collectible_file_was)
   end
   def json_file=(obj)
     super(obj)
-    self.json_file_has_just_been_uploaded = true
+    self.json_file_has_just_been_uploaded = (json_file == json_file_was)
+  end
+
+  # Base64 Decode (drag'n'dropped files)
+  def collectible_file_base64=(obj)
+    if obj.present?
+      base = obj.split(',')[1] # getting only the string leaving out the data/<format>
+      self.collectible_file = file_decode64(base, collectible_file_name)
+    end
+  end
+  def json_file_base64=(obj)
+    if obj.present?
+      base = obj.split(',')[1] # getting only the string leaving out the data/<format>
+      self.json_file = file_decode64(base, json_file_name)
+    end
   end
 
   # For sort_order functionality
@@ -48,6 +68,22 @@ class Collectible < ApplicationRecord
 
 
   private
+
+  def file_decode64(base, filename)
+    file = Tempfile.new(['decoded-', ".#{filename.split('.')[-1]}"])
+    file.binmode
+    file.write(Base64.decode64(base))
+    file.close
+    clean_after_save file
+    file
+  end
+
+  def collectible_file_name_changed
+    collectible_file_name.present? && collectible_file_name != "#{hashsum}.#{ext}"
+  end
+  def json_file_name_changed
+    json_file_name.present? && json_file_name != json_file.try(:file).try(:filename)
+  end
 
   def validate_json
     json = JSON.parse(json_file.file.read)
@@ -110,7 +146,7 @@ class Collectible < ApplicationRecord
     self.sort_order = (last_record.try(:sort_order) || 0) + 100
   end
 
-  def mv_collectible_file
+  def rename_collectible_file
     # Renaming downsized preview
     src  = File.join(Rails.configuration.coll_preview_storage_path, hashsum+"."+ext)
     dest = File.join(Rails.configuration.coll_preview_storage_path, collectible_file_name+"."+ext)
@@ -129,7 +165,7 @@ class Collectible < ApplicationRecord
     self.hashsum = collectible_file_name
   end
 
-  def mv_json_file
+  def rename_json_file
     # Renaming JSON file in j/ folder
     src  = File.join(Rails.configuration.json_storage_path, json_file.file.basename)
     dest = File.join(Rails.configuration.json_storage_path, json_file_name)
@@ -196,6 +232,17 @@ class Collectible < ApplicationRecord
       # JSON file in /j folder
       path_to_json_file = File.join(Rails.configuration.json_storage_path, json_file.file.basename)
       File.delete(path_to_json_file) if File.exist?(path_to_json_file)
+    end
+  end
+
+  def clean_after_save(file)
+    @tmp_files_to_cleanup ||= []
+    @tmp_files_to_cleanup << file
+  end
+
+  def tmp_files_cleanup
+    (@tmp_files_to_cleanup || []).each do |file|
+      file.unlink
     end
   end
 end
