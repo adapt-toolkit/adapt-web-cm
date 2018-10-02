@@ -190,8 +190,9 @@ class Collectible < ApplicationRecord
     end
   end
   def autoremove_json_file
-    if json_file_was.present?
-      path_to_json_file = File.join(Rails.configuration.json_storage_path, File.basename(json_file_was, ".*"))
+    filename_was = json_file_was.try(:file).try(:filename)
+    if filename_was.present?
+      path_to_json_file = File.join(Rails.configuration.json_storage_path, File.basename(filename_was, ".*"))
       File.delete(path_to_json_file) if File.exist?(path_to_json_file)
     end
   end
