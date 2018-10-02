@@ -118,7 +118,7 @@ class Collectible < ApplicationRecord
 
       json_hash = digest.hexdigest
 
-      if not json_file.file.filename.start_with?(json_hash)
+      if not json_file_name.start_with?(json_hash)
         errors.add(:json_file, "name doesn't match with calculated json hash")
       end
     end
